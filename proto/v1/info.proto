@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package beget.service.v1.info;
+import "google/api/annotations.proto";
+
+service InfoService {
+    rpc getTimeline (GetTimelineRequest) returns (GetTimelineResponse) {
+        option (google.api.http) = {
+            get: "/v1/service/info/timeline"
+        };
+    }
+}
+
+message GetTimelineRequest {
+
+}
+message GetTimelineResponse {
+    repeated Period period = 1;
+
+    message Period {
+        Type type = 1;
+        string from = 2; // W3C
+        string to = 3; // W3C
+        double rate = 4;
+
+        enum Type {
+            FREE = 0;
+            OLD_PLAN = 1;
+            TWO_YEAR_DISCOUNT = 2;
+            OLD_PLAN_TWO_YEAR_DISCOUNT = 3;
+            ONE_YEAR_DISCOUNT = 4;
+            OLD_PLAN_ONE_YEAR_DISCOUNT = 5;
+            COMMON = 6;
+        }
+    }
+}
