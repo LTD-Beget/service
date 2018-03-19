@@ -19,9 +19,10 @@ message GetTimelineResponse {
 
     message Period {
         Type type = 1;
-        string from = 2; // W3C
-        string to = 3; // W3C
-        double rate = 4;
+        uint32 days = 2;
+        string from = 3; // W3C
+        string to = 4; // W3C
+        double rate = 5;
 
         enum Type {
             FREE = 0;
