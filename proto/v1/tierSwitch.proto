@@ -1,0 +1,90 @@
+syntax = 'proto3';
+
+package beget.service.v1.tierSwitch;
+
+import "google/api/annotations.proto";
+
+service TierSwitchService {
+    rpc switch(TierSwitchRequest) returns (TierSwitchResponse) {
+        option (google.api.http) = {
+            post: "/v1/service/tierSwitch/switch"
+            body: "*"
+        };
+    }
+}
+
+message TierSwitchRequest {
+    // Имя тарифа, на который осуществляется переход
+    string plan_name = 1;
+
+    // Тип перехода
+    oneof switch_type {
+        // с бесплатного на платный хостинг
+        ToPaid to_paid = 10;
+        // с тарифа без услуги хостинга на хостинговый тариф
+        ToHosting to_hosting = 11;
+    }
+
+    message ToPaid {
+        oneof customer_data {
+            // Физическое лицо
+            PersonData person_data = 1;
+            // Юр. лицо или ИП
+            OrgData org_data = 2;
+        }
+
+        message PersonData {
+            // ФИО*
+            string full_name = 1;
+            // Электронная почта*
+            string email = 2;
+            // Другие средства связи
+            string additional_contacts = 3;
+        }
+
+        message OrgData {
+            // Название организации*
+            string org_name = 1;
+            // Электронная почта*
+            string email = 2;
+            // ИНН*
+            string inn = 3;
+            // КПП
+            string kpp = 4;
+            // Юридический адрес*
+            string legal_address = 5;
+            // Почтовый адрес*
+            string postal_address = 6;
+            // Другие средства связи
+            string additional_contacts = 7;
+        }
+    }
+
+    message ToHosting {}
+}
+
+message TierSwitchResponse {
+    oneof result {
+        Success success = 1;
+        Error error = 2;
+    }
+
+    message Success {}
+
+    message Error {
+        string message = 1;
+        ErrorCode code = 2;
+    }
+
+    enum ErrorCode {
+        _ = 0;
+        // Переход невозможен (например, попытка перейти с платного на платный хостинг)
+        INVALID_TARGET_TYPE = 1;
+        // Целевой тарифный план не найден или не доступен
+        INVALID_TARGET_PLAN = 2;
+        // Аккаунт является подчиненным
+        NOT_BILLING_MASTER = 3;
+        // Переход уже выполняется
+        ALREADY_PROCESSING = 4;
+    }
+}
