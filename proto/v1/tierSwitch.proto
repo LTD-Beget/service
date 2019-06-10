@@ -48,7 +48,7 @@ message TierSwitchRequest {
 
         message OrgData {
             // ИНН *
-            string inn = 1;
+            string taxpayer_number = 1;
             // Наименование юридического лица *
             string org_name = 2;
             // Страна * (ISO 3166-1 alpha-2)
@@ -68,7 +68,8 @@ message TierSwitchRequest {
         }
     }
 
-    message ToHosting {}
+    message ToHosting {
+    }
 }
 
 message TierSwitchResponse {
@@ -77,7 +78,8 @@ message TierSwitchResponse {
         Error error = 2;
     }
 
-    message Success {}
+    message Success {
+    }
 
     message Error {
         string message = 1;
@@ -97,7 +99,8 @@ message TierSwitchResponse {
     }
 }
 
-message GetStatusRequest {}
+message GetStatusRequest {
+}
 
 message GetStatusResponse {
     // Выполняется ли переход в данный момент
