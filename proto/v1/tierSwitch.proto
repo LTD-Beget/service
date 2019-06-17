@@ -1,0 +1,110 @@
+syntax = 'proto3';
+
+package beget.service.v1.tierSwitch;
+
+import "google/api/annotations.proto";
+
+service TierSwitchService {
+    rpc switch(TierSwitchRequest) returns (TierSwitchResponse) {
+        option (google.api.http) = {
+            post: "/v1/service/tierSwitch/switch"
+            body: "*"
+        };
+    }
+
+    rpc getStatus(GetStatusRequest) returns (GetStatusResponse) {
+        option (google.api.http) = {
+            get: "/v1/service/tierSwitch/status"
+        };
+    }
+}
+
+message TierSwitchRequest {
+    // Имя тарифа, на который осуществляется переход
+    string plan_name = 1;
+
+    // Тип перехода
+    oneof switch_type {
+        // с бесплатного на платный хостинг
+        ToPaid to_paid = 10;
+        // с тарифа без услуги хостинга на хостинговый тариф
+        ToHosting to_hosting = 11;
+    }
+
+    message ToPaid {
+        oneof customer_data {
+            // Физическое лицо
+            PersonData person_data = 1;
+            // Юр. лицо или ИП
+            OrgData org_data = 2;
+        }
+
+        message PersonData {
+            // ФИО *
+            string full_name = 1;
+            // E-mail *
+            string email = 2;
+        }
+
+        message OrgData {
+            // ИНН *
+            string taxpayer_number = 1;
+            // Наименование юридического лица *
+            string org_name = 2;
+            // Страна * (ISO 3166-1 alpha-2)
+            string country = 3;
+            // КПП
+            string kpp = 4;
+            // Юр. адрес *
+            string legal_address = 5;
+            // Почт. адрес *
+            string postal_address = 6;
+            // ФИО *
+            string full_name = 7;
+            // E-mail *
+            string email = 8;
+            // Телефон организации *
+            string org_phone_number = 9;
+        }
+    }
+
+    message ToHosting {
+    }
+}
+
+message TierSwitchResponse {
+    oneof result {
+        Success success = 1;
+        Error error = 2;
+    }
+
+    message Success {
+    }
+
+    message Error {
+        string message = 1;
+        ErrorCode code = 2;
+    }
+
+    enum ErrorCode {
+        _ = 0;
+        // Переход невозможен (например, попытка перейти с платного на платный хостинг)
+        INVALID_TARGET_TYPE = 1;
+        // Целевой тарифный план не найден или не доступен
+        INVALID_TARGET_PLAN = 2;
+        // Некорректные данные пользователя
+        INVALID_CUSTOMER_DATA = 3;
+        // Переход уже выполняется
+        ALREADY_PROCESSING = 4;
+    }
+}
+
+message GetStatusRequest {
+}
+
+message GetStatusResponse {
+    // Выполняется ли переход в данный момент
+    bool is_processing = 1;
+    // На какой тариф выполняется переход
+    string plan_name_to = 2;
+}
