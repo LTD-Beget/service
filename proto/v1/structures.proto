@@ -1,0 +1,9 @@
+syntax = 'proto3';
+
+package beget.service.v1.structures;
+
+// Тип перехода
+enum SwitchType {
+    TO_PAID = 0;
+    TO_HOSTING = 1;
+}
