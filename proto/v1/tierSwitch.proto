@@ -3,19 +3,43 @@ syntax = 'proto3';
 package beget.service.v1.tierSwitch;
 
 import "google/api/annotations.proto";
+import "service/proto/v1/structures.proto";
 
 service TierSwitchService {
-    rpc switch(TierSwitchRequest) returns (TierSwitchResponse) {
+    rpc getSwitches (GetSwitchesRequest) returns (GetSwitchesResponse) {
+        option (google.api.http) = {
+            get: "/v1/service/tierSwitch/switch"
+        };
+    }
+
+    rpc switch (TierSwitchRequest) returns (TierSwitchResponse) {
         option (google.api.http) = {
             post: "/v1/service/tierSwitch/switch"
             body: "*"
         };
     }
 
-    rpc getStatus(GetStatusRequest) returns (GetStatusResponse) {
+    rpc getStatus (GetStatusRequest) returns (GetStatusResponse) {
         option (google.api.http) = {
             get: "/v1/service/tierSwitch/status"
         };
+    }
+}
+
+message GetSwitchesRequest {
+}
+
+message GetSwitchesResponse {
+    // Доступные переходы
+    repeated SwitchAction switches = 1;
+
+    message SwitchAction {
+        // Тип перехода
+        structures.SwitchType switch_type = 1;
+        // Имена тарифов, доступных для этого типа перехода
+        repeated string plan_names = 2;
+        // Число дней, начисляемых после перехода
+        uint32 free_days = 3;
     }
 }
 
