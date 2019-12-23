@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package beget.service.v1.plan;
+
+import "google/api/annotations.proto";
+import "service/proto/v1/structures.proto";
+
+service PlanService {
+    // Получить список доступных не архивных тарифов
+    rpc getList (GetListRequest) returns (GetListResponse) {
+        option (google.api.http) = {
+            get: "/v1/service/plan"
+        };
+    }
+}
+
+message GetListRequest {
+}
+
+message GetListResponse {
+    repeated structures.PlanInfo plan = 1;
+}
