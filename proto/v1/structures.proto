@@ -2,6 +2,70 @@ syntax = 'proto3';
 
 package beget.service.v1.structures;
 
+// Информация о тарифном плане без привязки к текущему пользователю
+message PlanInfo {
+    uint32 id = 1;
+    // Имя тарифного плана
+    string name = 2;
+
+    // Тип тарифа
+    PlanType type = 3;
+
+    // Тарификация
+    Rate rate = 4;
+    // Цены за период
+    Price price = 5;
+
+    // Характеристики тарифа
+    repeated PlanOption plan_option = 6;
+
+    message Rate {
+        // стоимость в день без скидок
+        string base = 1;
+        // стоимость в день при оплате за год
+        string year = 2;
+    }
+
+    message Price {
+        // цена за месяц
+        string month = 1;
+        // цена за год с учетом скидки
+        string year  = 2;
+    }
+}
+
+// Базовая опция тарифа
+message PlanOption {
+    // Название опции
+    string name = 1;
+    // Единица изменерения
+    string unit = 2;
+    // Системное имя
+    string type = 3;
+    // Исходное значение в тарифе
+    uint32 value = 4;
+}
+
+// Тип тарифного плана
+enum PlanType {
+    // Неизвестный тип
+    UNKNOWN = 0;
+    // Бесплатный хостинг
+    FREE_HOSTING = 1;
+    // Виртуальный хостинг
+    VIRTUAL_HOSTING = 2;
+    // VIP-хостинг
+    VIP_HOSTING = 3;
+    // Выделенный сервер
+    DEDICATED_SERVER = 4;
+    // Выделенный сервер с собственным администрированием
+    DEDICATED_SERVER_NO_ADMIN = 5;
+    // Тариф для VPS
+    VPS = 6;
+    // Парковка доменов
+    PARKING = 7;
+}
+
 // Тип перехода
 enum SwitchType {
     TO_PAID = 0;
