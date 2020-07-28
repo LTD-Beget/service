@@ -64,6 +64,8 @@ enum PlanType {
     VPS = 6;
     // Парковка доменов
     PARKING = 7;
+    // Bitrix-хостинг
+    BITRIX_HOSTING = 8;
 }
 
 // Тип перехода

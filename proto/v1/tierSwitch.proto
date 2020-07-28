@@ -37,9 +37,17 @@ message GetSwitchesResponse {
         // Тип перехода
         structures.SwitchType switch_type = 1;
         // Имена тарифов, доступных для этого типа перехода
-        repeated string plan_names = 2;
+        repeated string plan_names = 2 [deprecated = true];
         // Число дней, начисляемых после перехода
-        uint32 free_days = 3;
+        uint32 free_days = 3 [deprecated = true];
+        // Тарифы, доступные для этого типа перехода
+        repeated TargetPlan target_plan = 4;
+
+        message TargetPlan {
+            string plan_name = 1;
+            // Число дней, начисляемых после перехода на выбранный тариф
+            uint32 free_days = 2;
+        }
     }
 }
 
