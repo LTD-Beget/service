@@ -4,11 +4,27 @@ package beget.service.v1.info;
 import "google/api/annotations.proto";
 
 service InfoService {
+    rpc getInfo (GetInfoRequest) returns (GetInfoResponse) {
+        option (google.api.http) = {
+            get: "/v1/service/info"
+        };
+    }
+
     rpc getTimeline (GetTimelineRequest) returns (GetTimelineResponse) {
         option (google.api.http) = {
             get: "/v1/service/info/timeline"
         };
     }
+}
+
+message GetInfoRequest {
+}
+
+message GetInfoResponse {
+    double balance = 1;
+    uint32 free_days = 2;
+    double total_daily_rate = 3;
+    double promised_pay = 4;
 }
 
 message GetTimelineRequest {
