@@ -34,12 +34,11 @@ message GetSwitchesResponse {
     repeated SwitchAction switches = 1;
 
     message SwitchAction {
+        reserved "plan_names", "free_days";
+        reserved 2, 3;
+
         // Тип перехода
         structures.SwitchType switch_type = 1;
-        // Имена тарифов, доступных для этого типа перехода
-        repeated string plan_names = 2 [deprecated = true];
-        // Число дней, начисляемых после перехода
-        uint32 free_days = 3 [deprecated = true];
         // Тарифы, доступные для этого типа перехода
         repeated TargetPlan target_plan = 4;
 
